@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>English Practice Studio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #ededea;
+    --text: #1a1a1a;
+    --text2: #666660;
+    --text3: #999994;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.2);
+    --accent: #378ADD;
+    --accent-bg: #e6f1fb;
+    --accent-text: #185fa5;
+    --success: #3b6d11;
+    --danger: #a32d2d;
+    --radius: 10px;
+    --radius-sm: 7px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252522;
+      --bg3: #2e2e2b;
+      --text: #f0ede6;
+      --text2: #a8a49c;
+      --text3: #6e6b64;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.18);
+      --accent: #5b9de0;
+      --accent-bg: #0c2a4a;
+      --accent-text: #85b7eb;
+      --success: #97c459;
+      --danger: #f09595;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg3);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 3rem;
+  }
+
+  header {
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--accent-bg);
+    color: var(--accent-text);
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .keys-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .keys-grid { grid-template-columns: 1fr; }
+  }
+
+  .key-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 5px;
+  }
+
+  .api-row {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+  input[type="password"], input[type="text"], textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input[type="password"]:focus, input[type="text"]:focus, textarea:focus {
+    border-color: var(--border2);
+  }
+
+  input[type="password"] { font-family: monospace; font-size: 13px; }
+
+  textarea {
+    min-height: 88px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .api-status {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 7px;
+  }
+  .api-status.ok { color: var(--success); }
+  .api-status.err { color: var(--danger); }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 7px 15px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  button:hover { background: var(--bg2); }
+  button:active { transform: scale(0.98); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .action-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .result-box {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--bg2);
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--accent);
+    display: none;
+  }
+  .result-box.show { display: block; }
+
+  .version-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 5px;
+  }
+
+  .version-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 12px 0;
+  }
+
+  .use-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .voice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .voice-card {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .voice-card:hover { background: var(--bg2); }
+  .voice-card.active {
+    background: var(--accent-bg);
+    border-color: transparent;
+  }
+  .voice-card.active .vc-name { color: var(--accent-text); }
+  .voice-card.active .vc-desc { color: var(--accent-text); opacity: 0.8; }
+  .vc-name { font-size: 13px; font-weight: 500; display: block; color: var(--text); }
+  .vc-desc { font-size: 11px; color: var(--text2); display: block; margin-top: 2px; }
+
+  .player-wrap {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--bg2);
+    border-radius: var(--radius-sm);
+    display: none;
+  }
+  .player-wrap.show { display: block; }
+  .player-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  audio { width: 100%; height: 36px; margin-top: 4px; }
+
+  .record-zone {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .rec-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border2);
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  .rec-dot.active { background: #e24b4a; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  .timer {
+    font-size: 13px;
+    font-family: monospace;
+    color: var(--text2);
+    min-width: 38px;
+  }
+
+  .msg {
+    font-size: 12px;
+    margin-top: 7px;
+    min-height: 16px;
+    color: var(--text3);
+  }
+  .msg.ok { color: var(--success); }
+  .msg.err { color: var(--danger); }
+
+  .history-item {
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .history-item:last-child { border-bottom: none; }
+
+  .history-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  .h-date { font-size: 11px; color: var(--text3); font-family: monospace; }
+  .h-voice {
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--bg2);
+    color: var(--text2);
+  }
+
+  .h-src { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+  .h-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .h-audios { display: flex; gap: 8px; flex-wrap: wrap; }
+  .h-audios a {
+    font-size: 11px;
+    color: var(--accent-text);
+    text-decoration: underline;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text3);
+    font-size: 13px;
+  }
+
+  .export-row { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .tip {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <i class="ti ti-language" style="font-size:20px;color:var(--text2)"></i>
+  <h1>English Practice Studio</h1>
+  <span class="badge" id="session-count">0 sessions</span>
+</header>
+
+<div class="container">
+
+  <!-- API Keys -->
+  <div class="card">
+    <p class="section-label">API Keys</p>
+    <div class="keys-grid">
+      <div>
+        <p class="key-label">DeepSeek (translation)</p>
+        <div class="api-row">
+          <input type="password" id="ds-key" placeholder="sk-..." autocomplete="off"/>
+          <button onclick="saveKeys()" title="Save"><i class="ti ti-check"></i></button>
+        </div>
+      </div>
+      <div>
+        <p class="key-label">ElevenLabs (voice)</p>
+        <div class="api-row">
+          <input type="password" id="el-key" placeholder="sk_..." autocomplete="off"/>
+          <button onclick="saveKeys()" title="Save"><i class="ti ti-check"></i></button>
+        </div>
+      </div>
+    </div>
+    <p class="api-status" id="key-status">Keys stay in memory only — cleared when you close the tab.</p>
+  </div>
+
+  <!-- Translation -->
+  <div class="card">
+    <p class="section-label"><i class="ti ti-language" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Chinese → English</p>
+    <textarea id="cn-input" placeholder="输入中文，翻译成地道美式口语…"></textarea>
+    <div class="action-row">
+      <button id="tr-btn" onclick="translate()">
+        <i class="ti ti-sparkles"></i> Translate
+      </button>
+    </div>
+    <p class="msg" id="tr-msg"></p>
+    <div class="result-box" id="result-box">
+      <div>
+        <p class="version-label">Short & punchy</p>
+        <p class="version-text" id="short-ver"></p>
+      </div>
+      <hr class="divider">
+      <div>
+        <p class="version-label">Fuller & more expressive</p>
+        <p class="version-text" id="full-ver"></p>
+      </div>
+      <div class="use-btn-row">
+        <button onclick="useVersion('short')"><i class="ti ti-arrow-down"></i> Use short version</button>
+        <button onclick="useVersion('full')"><i class="ti ti-arrow-down"></i> Use full version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TTS -->
+  <div class="card">
+    <p class="section-label"><i class="ti ti-headphones" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Listen & Shadow</p>
+    <textarea id="practice-text" placeholder="Translation loads here automatically, or paste your own text…"></textarea>
+
+    <p class="section-label" style="margin-top:14px">Voice</p>
+    <div class="voice-grid">
+      <button class="voice-card active" onclick="setVoice('JBFqnCBsd6RMkjVDRZzb','George',this)">
+        <span class="vc-name">George</span>
+        <span class="vc-desc">Male · warm, natural</span>
+      </button>
+      <button class="voice-card" onclick="setVoice('EXAVITQu4vr4xnSDxMaL','Sarah',this)">
+        <span class="vc-name">Sarah</span>
+        <span class="vc-desc">Female · clear, friendly</span>
+      </button>
+      <button class="voice-card" onclick="setVoice('TX3LPaxmHKxFdv7VOQHJ','Liam',this)">
+        <span class="vc-name">Liam</span>
+        <span class="vc-desc">Male · conversational</span>
+      </button>
+      <button class="voice-card" onclick="setVoice('XB0fDUnXU5powFXDhCwa','Charlotte',this)">
+        <span class="vc-name">Charlotte</span>
+        <span class="vc-desc">Female · expressive</span>
+      </button>
+      <button class="voice-card" onclick="setVoice('pFZP5JQG7iQjIQuC4Bku','Lily',this)">
+        <span class="vc-name">Lily</span>
+        <span class="vc-desc">Female · soft, warm</span>
+      </button>
+      <button class="voice-card" onclick="setVoice('onwK4e9ZLuTAKqWW03F9','Daniel',this)">
+        <span class="vc-name">Daniel</span>
+        <span class="vc-desc">Male · authoritative</span>
+      </button>
+    </div>
+
+    <div class="action-row">
+      <button id="tts-btn" onclick="generateTTS()">
+        <i class="ti ti-player-play"></i> Generate & play
+      </button>
+    </div>
+    <p class="msg" id="tts-msg"></p>
+
+    <div class="player-wrap" id="tts-player">
+      <p class="player-label"><i class="ti ti-headphones" style="font-size:14px"></i> AI reading</p>
+      <audio id="tts-audio" controls></audio>
+    </div>
+    <div class="player-wrap" id="rec-player" style="margin-top:8px">
+      <p class="player-label"><i class="ti ti-microphone" style="font-size:14px"></i> Your recording</p>
+      <audio id="rec-audio" controls></audio>
+    </div>
+  </div>
+
+  <!-- Record -->
+  <div class="card">
+    <p class="section-label"><i class="ti ti-microphone-2" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Your Turn — Shadow It</p>
+    <p class="tip">Listen to the AI a few times, then hit record and shadow along.</p>
+    <div class="record-zone">
+      <div class="rec-dot" id="rec-dot"></div>
+      <button id="rec-btn" onclick="toggleRecord()">
+        <i class="ti ti-microphone" id="rec-icon"></i>
+        <span id="rec-label">Start recording</span>
+      </button>
+      <span class="timer" id="timer">0:00</span>
+      <button id="save-btn" onclick="saveSession()" disabled>
+        <i class="ti ti-device-floppy"></i> Save session
+      </button>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="card">
+    <p class="section-label"><i class="ti ti-history" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>Practice History</p>
+    <div id="history-list">
+      <div class="empty-state">No sessions yet — start practicing!</div>
+    </div>
+    <div class="export-row">
+      <button onclick="exportJSON()"><i class="ti ti-download"></i> Export JSON</button>
+      <button onclick="exportText()"><i class="ti ti-file-text"></i> Export text log</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let dsKey='', elKey='';
+let voiceId='JBFqnCBsd6RMkjVDRZzb', voiceName='George';
+let ttsBlob=null, recBlob=null;
+let mediaRecorder=null, recChunks=[], recInterval=null, recSeconds=0, isRecording=false;
+let sessions=[], shortResult='', fullResult='', currentCnText='';
+
+function saveKeys(){
+  const dk=document.getElementById('ds-key').value.trim();
+  const ek=document.getElementById('el-key').value.trim();
+  let msgs=[];
+  if(dk){dsKey=dk;msgs.push('DeepSeek key saved');}
+  if(ek){elKey=ek;msgs.push('ElevenLabs key saved');}
+  const el=document.getElementById('key-status');
+  el.textContent=msgs.length?msgs.join(' · ')+'.':'Enter at least one key.';
+  el.className='api-status '+(msgs.length?'ok':'err');
+}
+
+function setMsg(id,text,type=''){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.textContent=text;
+  el.className='msg '+type;
+}
+
+function setVoice(id,name,el){
+  voiceId=id; voiceName=name;
+  document.querySelectorAll('.voice-card').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function translate(){
+  const cn=document.getElementById('cn-input').value.trim();
+  if(!cn){setMsg('tr-msg','Please enter some Chinese text.','err');return;}
+  if(!dsKey){setMsg('tr-msg','Enter your DeepSeek API key first.','err');return;}
+  currentCnText=cn;
+  const btn=document.getElementById('tr-btn');
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader-2"></i> Translating…';
+  setMsg('tr-msg','Working on it…');
+  document.getElementById('result-box').classList.remove('show');
+
+  const sys=`You are an expert American English translator and language coach. Translate Chinese into authentic, natural everyday American English — the kind real people actually speak.
+
+Style rules:
+- Plain, direct, conversational. No stiff or formal phrasing.
+- Use common phrasal verbs and everyday idioms where natural.
+- Vary sentence lengths for rhythm and flow.
+- Warm, friendly tone. Accessible to a broad American audience.
+
+Respond ONLY with this exact JSON, no preamble, no markdown fences:
+{"short":"concise punchy version 1-3 sentences","full":"fuller warmer more expressive version"}`;
+
+  try{
+    const res=await fetch('https://api.deepseek.com/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+dsKey},
+      body:JSON.stringify({
+        model:'deepseek-chat',
+        max_tokens:1000,
+        messages:[{role:'system',content:sys},{role:'user',content:cn}]
+      })
+    });
+    if(!res.ok){
+      let msg='DeepSeek error '+res.status;
+      try{const e=await res.json();msg=e.error?.message||msg;}catch(x){}
+      throw new Error(msg);
+    }
+    const data=await res.json();
+    const raw=data.choices?.[0]?.message?.content||'';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    shortResult=parsed.short||''; fullResult=parsed.full||'';
+    document.getElementById('short-ver').textContent=shortResult;
+    document.getElementById('full-ver').textContent=fullResult;
+    document.getElementById('result-box').classList.add('show');
+    setMsg('tr-msg','Done! Pick a version to practice with.','ok');
+  }catch(e){setMsg('tr-msg','Error: '+e.message,'err');}
+
+  btn.disabled=false;
+  btn.innerHTML='<i class="ti ti-sparkles"></i> Translate';
+}
+
+function useVersion(which){
+  const text=which==='short'?shortResult:fullResult;
+  document.getElementById('practice-text').value=text;
+  document.getElementById('practice-text').scrollIntoView({behavior:'smooth',block:'center'});
+  setMsg('tts-msg','Text loaded — hit Generate & play to hear it.','ok');
+}
+
+async function generateTTS(){
+  const text=document.getElementById('practice-text').value.trim();
+  if(!text){setMsg('tts-msg','Please enter some text first.','err');return;}
+  if(!elKey){setMsg('tts-msg','Enter your ElevenLabs API key first.','err');return;}
+  const btn=document.getElementById('tts-btn');
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader-2"></i> Generating…';
+  setMsg('tts-msg','Calling ElevenLabs…');
+  try{
+    const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,{
+      method:'POST',
+      headers:{'xi-api-key':elKey,'Content-Type':'application/json','Accept':'audio/mpeg'},
+      body:JSON.stringify({
+        text,
+        model_id:'eleven_turbo_v2_5',
+        voice_settings:{stability:0.5,similarity_boost:0.75,style:0.3,use_speaker_boost:true}
+      })
+    });
+    if(!res.ok){
+      let msg='ElevenLabs error '+res.status;
+      try{const e=await res.json();msg=e.detail?.message||e.detail||msg;}catch(x){}
+      throw new Error(msg);
+    }
+    ttsBlob=await res.blob();
+    const url=URL.createObjectURL(ttsBlob);
+    const audio=document.getElementById('tts-audio');
+    audio.src=url; audio.play();
+    document.getElementById('tts-player').classList.add('show');
+    setMsg('tts-msg','Playing! Listen a few times, then shadow it.','ok');
+  }catch(e){setMsg('tts-msg','Error: '+e.message,'err');}
+  btn.disabled=false;
+  btn.innerHTML='<i class="ti ti-player-play"></i> Generate & play';
+}
+
+async function toggleRecord(){
+  if(!isRecording){
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRecorder=new MediaRecorder(stream);
+      recChunks=[];
+      mediaRecorder.ondataavailable=e=>recChunks.push(e.data);
+      mediaRecorder.onstop=()=>{
+        recBlob=new Blob(recChunks,{type:'audio/webm'});
+        const url=URL.createObjectURL(recBlob);
+        document.getElementById('rec-audio').src=url;
+        document.getElementById('rec-player').classList.add('show');
+        document.getElementById('save-btn').disabled=false;
+        stream.getTracks().forEach(t=>t.stop());
+      };
+      mediaRecorder.start(); isRecording=true; recSeconds=0;
+      document.getElementById('rec-dot').classList.add('active');
+      document.getElementById('rec-label').textContent='Stop recording';
+      document.getElementById('rec-icon').className='ti ti-square';
+      recInterval=setInterval(()=>{
+        recSeconds++;
+        const m=Math.floor(recSeconds/60),s=recSeconds%60;
+        document.getElementById('timer').textContent=m+':'+String(s).padStart(2,'0');
+      },1000);
+    }catch(e){setMsg('tts-msg','Microphone access denied — please allow mic access in your browser.','err');}
+  }else{
+    mediaRecorder.stop(); isRecording=false; clearInterval(recInterval);
+    document.getElementById('rec-dot').classList.remove('active');
+    document.getElementById('rec-label').textContent='Start recording';
+    document.getElementById('rec-icon').className='ti ti-microphone';
+  }
+}
+
+function saveSession(){
+  const text=document.getElementById('practice-text').value.trim();
+  if(!text)return;
+  const now=new Date();
+  sessions.unshift({
+    id:Date.now(),
+    date:now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    time:now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
+    voice:voiceName, cnSource:currentCnText||'', text,
+    ttsUrl:ttsBlob?URL.createObjectURL(ttsBlob):null,
+    recUrl:recBlob?URL.createObjectURL(recBlob):null,
+    duration:document.getElementById('timer').textContent
+  });
+  renderHistory();
+  document.getElementById('save-btn').disabled=true;
+  setMsg('tts-msg','Session saved!','ok');
+  document.getElementById('session-count').textContent=sessions.length+' session'+(sessions.length===1?'':'s');
+}
+
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!sessions.length){el.innerHTML='<div class="empty-state">No sessions yet — start practicing!</div>';return;}
+  el.innerHTML=sessions.map(s=>`
+    <div class="history-item">
+      <div class="history-meta">
+        <span class="h-date">${s.date} ${s.time}</span>
+        <span class="h-voice">${s.voice}</span>
+        <span class="h-date">${s.duration}</span>
+      </div>
+      ${s.cnSource?`<p class="h-src">🇨🇳 ${esc(s.cnSource.slice(0,60))}${s.cnSource.length>60?'…':''}</p>`:''}
+      <div class="h-text">${esc(s.text)}</div>
+      <div class="h-audios">
+        ${s.ttsUrl?`<a href="${s.ttsUrl}" download="tts-${s.id}.mp3"><i class="ti ti-player-play" style="font-size:11px"></i> AI audio</a>`:''}
+        ${s.recUrl?`<a href="${s.recUrl}" download="rec-${s.id}.webm"><i class="ti ti-microphone" style="font-size:11px"></i> My recording</a>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function exportJSON(){
+  if(!sessions.length){setMsg('tts-msg','No sessions to export.','err');return;}
+  dl('shadowing-sessions.json',JSON.stringify(sessions.map(s=>({id:s.id,date:s.date,time:s.time,voice:s.voice,cnSource:s.cnSource,text:s.text,duration:s.duration})),null,2),'application/json');
+}
+
+function exportText(){
+  if(!sessions.length){setMsg('tts-msg','No sessions to export.','err');return;}
+  dl('shadowing-log.txt',sessions.map(s=>`[${s.date} ${s.time}] Voice: ${s.voice} | ${s.duration}${s.cnSource?'\nCN: '+s.cnSource:''}\nEN: ${s.text}`).join('\n\n---\n\n'),'text/plain');
+}
+
+function dl(name,content,type){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type}));
+  a.download=name; a.click();
+}
+</script>
+</body>
+</html>
