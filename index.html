@@ -393,7 +393,12 @@
         </div>
       </div>
     </div>
-    <p class="api-status" id="key-status">Keys stay in memory only — cleared when you close the tab.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px">
+      <p class="api-status" id="key-status" style="margin:0">Keys stay in memory only — cleared when you close the tab.</p>
+      <button onclick="clearKeys()" style="font-size:11px;padding:4px 10px;color:var(--text3);border-color:var(--border)">
+        <i class="ti ti-trash" style="font-size:12px"></i> Clear keys
+      </button>
+    </div>
   </div>
 
   <!-- Translation -->
@@ -511,16 +516,41 @@ let ttsBlob=null, recBlob=null;
 let mediaRecorder=null, recChunks=[], recInterval=null, recSeconds=0, isRecording=false;
 let sessions=[], shortResult='', fullResult='', currentCnText='';
 
+function loadSavedKeys(){
+  const dk=localStorage.getItem('ep_ds_key')||'';
+  const ek=localStorage.getItem('ep_el_key')||'';
+  if(dk){dsKey=dk;document.getElementById('ds-key').value=dk;}
+  if(ek){elKey=ek;document.getElementById('el-key').value=ek;}
+  if(dk||ek){
+    const el=document.getElementById('key-status');
+    el.textContent='Keys loaded from your browser. Ready to go!';
+    el.className='api-status ok';
+  }
+}
+
 function saveKeys(){
   const dk=document.getElementById('ds-key').value.trim();
   const ek=document.getElementById('el-key').value.trim();
   let msgs=[];
-  if(dk){dsKey=dk;msgs.push('DeepSeek key saved');}
-  if(ek){elKey=ek;msgs.push('ElevenLabs key saved');}
+  if(dk){dsKey=dk;localStorage.setItem('ep_ds_key',dk);msgs.push('DeepSeek key saved');}
+  if(ek){elKey=ek;localStorage.setItem('ep_el_key',ek);msgs.push('ElevenLabs key saved');}
   const el=document.getElementById('key-status');
-  el.textContent=msgs.length?msgs.join(' · ')+'.':'Enter at least one key.';
+  el.textContent=msgs.length?msgs.join(' · ')+' — remembered in this browser.':'Enter at least one key.';
   el.className='api-status '+(msgs.length?'ok':'err');
 }
+
+function clearKeys(){
+  localStorage.removeItem('ep_ds_key');
+  localStorage.removeItem('ep_el_key');
+  dsKey=''; elKey='';
+  document.getElementById('ds-key').value='';
+  document.getElementById('el-key').value='';
+  const el=document.getElementById('key-status');
+  el.textContent='Keys cleared from this browser.';
+  el.className='api-status';
+}
+
+window.addEventListener('DOMContentLoaded', loadSavedKeys);
 
 function setMsg(id,text,type=''){
   const el=document.getElementById(id);
